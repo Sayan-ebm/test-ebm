@@ -7,39 +7,6 @@
 ae_reset_flags <- reactiveValues(
   ae_file = FALSE
 )
-
-ae_file_file <- reactive({
-  if (isTRUE(ae_reset_flags$ae_file)) return(NULL)
-  input$ae_file
-})
-
-# Clear the flag as soon as the user picks a genuinely new file
-observeEvent(input$ae_file, { ae_reset_flags$ae_file <- FALSE }, ignoreInit = TRUE, ignoreNULL = TRUE)
-
-observeEvent(input$reset_ae_file, {
-  ae_reset_flags$ae_file <- TRUE
-  shinyjs::reset("ae_file")
-  showNotification("AE dataset reset to default dataset.", type = "message")
-})
-
-#########################################################
-#### AE DATASET #########################################
-#########################################################
-ae_dataset <- reactive({
-  if(is.null(ae_file_file())){
-    return(default_ae_probabilities)
-  }
-  read.csv(
-    ae_file_file()$datapath,
-    stringsAsFactors = FALSE
-  )
-})
-
-
-
-observe({
-  if(!isTRUE(input$include_ae_model)){
-    return()
   }
   required_cols <- c("Event", "prob_comparator", "N_comparator", "prob_intervention", "N_intervention", "cost", "disutility")
   optional_cols <- c(
