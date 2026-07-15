@@ -1,0 +1,70 @@
+Event,prob_comparator,prob_intervention
+Fracture,0,0.000157382
+Abdominal pain,0.000715013,0.000232772
+Anemia,0.000715013,0.000624371
+Anorexia,0,0.000790741
+Arthralgia,0.002015776,0.000492527
+Back pain,0.000715013,0.000424118
+Bone pain,0.001385164,0.00030612
+Chills,0.000715013,0.000157382
+Constipation,0,0.000687963
+Cough,0.000715013,0.000424118
+Diarrhea,0.000715013,0.001113626
+Dizziness,0,0.00028189
+Dysgeusia,0.000715013,0.000353938
+Dyspnea,0.000715013,0.00028189
+Ear and Labyrinth disorders,0,0.000157382
+EdemaLimbs,0,0.000424118
+Fatigue,0.001385164,0.000966457
+Flu like symptoms,0,0.000447114
+Generalized Muscle Weakness,0.000715013,0.000232772
+Headache,0,0.000353938
+Hotflashes,0,0.00030612
+Hypertension,0,0.000232772
+Hypoalbuminemia,0.000715013,0.000157382
+Hypocalcemia,0,0.000232772
+Hypokalemia,0,0.000157382
+Hyponatremia,0,0.00028189
+Insomnia,0,0.000157382
+Lymphocyte count decrease,0.002611276,0.000729543
+Myalgia,0.002015776,0.000559251
+Nasal Congestion,0.001385164,0.000232772
+Nausea,0.000715013,0.001022586
+Neck pain,0,0.000157382
+Neutrophil count decrease,0,0.000729543
+Pain in extremity,0.000715013,0.00030612
+Paresthesia,0,0.00028189
+Platelet count decrease,0,0.000424118
+Pleural effusion,0,0.000157382
+Pruritus,0,0.000353938
+Rash maculo-papular,0,0.000157382
+Skin and subcutaneous tissue disorders,0,0.000157382
+Testicular pain,0,0.000157382
+Urinary frequency,0.000715013,0.000157382
+Urinary urgency,0,0.000157382
+Vomiting,0,0.00028189
+Weight loss,0,0.00030612
+White blood Count decrease,0,0.001077576
+Venous Thrombo Embolism,0,0
+Alkaline phosphatase increased,0.002015776,0
+Alopecia,0.000715013,0
+Anxiety,0.000715013,0
+Bloating,0.000715013,0
+Blood bilirubin increased,0.000715013,0
+Creatinine increased,0.000715013,0
+Depression,0.000715013,0
+Facial Pain,0.000715013,0
+Flatulence,0.000715013,0
+Gastroesophageal reflux disease,0.000715013,0
+Gynecomastia,0.000715013,0
+Muscle weakness lower limb,0.001385164,0
+Muscle weakness upper limb,0.000715013,0
+"Neoplasms benign, malignant and unspecified (incl cysts and polyps)",0.000715013,0
+Non-cardiac chest pain,0.000715013,0
+Palpitations,0.000715013,0
+Peripheral sensory neuropathy,0.000715013,0
+Productive cough,0.001385164,0
+Psychiatric disorders,0.000715013,0
+Skin ulceration,0.000715013,0
+Sore throat,0.000715013,0
+Vertigo,0.000715013,0

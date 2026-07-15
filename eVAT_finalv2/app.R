@@ -1,0 +1,228 @@
+##### Global: options #####
+Production <- TRUE
+options(scipen = 1000, expressions = 10000)
+appVersion <- "v1.0"
+appName <- "early Value Assessment Tool"
+
+##### Global: load libraries #####
+source("appFiles/packageLoad.R")
+source("appFiles/DataLoad.R", local = TRUE)
+source("appFiles/serverFunctions.R", local = TRUE)
+source("appFiles/survival_functions.R", local = TRUE)
+source("appFiles/survival_fit_functions.R", local = TRUE)
+source("appFiles/survival_plot_functions.R", local = TRUE)
+source("appFiles/survival_engine.R", local = TRUE)
+source("appFiles/therapycostfunction.R", local = TRUE)
+source("appFiles/TimeHorizonUI.R", local = TRUE)
+source("appFiles/survival_model_selection.R", local = TRUE)
+source("appFiles/state_occupancy_functions.R", local = TRUE)
+source("appFiles/background_mortality.R", local = TRUE)
+source("appFiles/treatment_schedule.R", local = TRUE)
+source("appFiles/treatment_settings.R", local = TRUE)
+source("appFiles/treatment_cost_engine.R", local = TRUE)
+source("appFiles/HealthstateFunctions.R", local = TRUE)
+source("appFiles/AEFunctions.R", local = TRUE)
+
+##### Global: source snippet files #####
+source("appFiles/CSS.R", local = TRUE)
+source("appFiles/WelcomePage.R", local = TRUE)
+source("appFiles/SurvivalComparatorUI.R", local = TRUE)
+source("appFiles/SurvivalInterventionUI.R", local = TRUE)
+source("appFiles/TreatmentCostsUI.R", local = TRUE)
+source("appFiles/HealthstateUtilitiesUI.R", local = TRUE)
+source("appFiles/AdverseEventsUI.R", local = TRUE)
+source("appFiles/ModelsettingsUI.R", local = TRUE)
+source("appFiles/ResultsUI.R", local = TRUE)
+source("appFiles/PSA_UI.R", local = TRUE)
+
+##### User interface #####
+ui <- tagList(
+  ##### CSS and style functions #####
+  CSS,  
+  tags$script(src = "numericInputGuard.js"),
+  useShinyjs(),
+  useSweetAlert(),
+  introjsUI(),
+  # Add the inactivity timer (set to 30 minutes)
+  extendShinyjs(
+  text = "
+    shinyjs.idleTimer = function(timeout) {
+      let timer;
+      window.onload = resetTimer;
+      window.onmousemove = resetTimer;
+      window.onmousedown = resetTimer;
+      window.ontouchstart = resetTimer;
+      window.onclick = resetTimer;
+      window.onkeypress = resetTimer;
+      window.addEventListener('scroll', resetTimer, true);
+      function resetTimer() {
+        clearTimeout(timer);
+        timer = setTimeout(function() {
+          Shiny.setInputValue('timeout', Math.random());
+        }, timeout * 1000);
+      }
+    }
+  ",
+   functions = c("idleTimer")          
+                ),
+  # Initialize the timer to 30 minutes (1800 seconds)
+  tags$script(HTML("shinyjs.idleTimer(1800);")),
+  ##### dashboardPage #####
+  dashboardPage(
+    skin = "black",
+    ##### dashboardHeader #####
+    dashboardHeader(
+      title = appName,
+      titleWidth = 500, # Adjust title width for proper alignment
+      #tags$li(class = "dropdown", actionLink("appHelpModal", "Help")),
+      PXLLogoLi #CSS.R for logo on the right
+    ),
+    ##### dashboardSidebar #####
+    dashboardSidebar(
+      disable = TRUE
+    ),
+    ##### dashboardBody #####
+    dashboardBody(
+      tabBox(
+        width = "100%",
+        id = "appBox",
+        tabPanel(
+          "Home",
+          value = "homePanel",
+          icon = icon("home"),
+          welcomePageUI
+        ),
+        tabPanel(
+          "Survival Estimates - Comparator",
+          value = "survivalComparatorPanel",
+          icon = icon("chart-line"),
+          SurvivalComparatorUI
+        ),
+        tabPanel(
+          "Survival Estimates - Intervention",
+          value = "survivalComparatorPanel",
+          icon = icon("chart-line"),
+          SurvivalInterventionUI
+        ),
+        tabPanel(
+          "Treatment Costs",
+          value = "TreatmentCostsPanel",
+          icon = icon("money-bill-wave"),
+          TreatmentCostsUI
+        ),
+        tabPanel(
+          "Health States and Utilities",
+          value = "HealthStateCostsUtilitiesPanel",
+          icon = icon("heartbeat"),
+          HealthStateCostsUtilitiesUI
+        ),
+        tabPanel(
+          "Adverse Events",
+          value = "AdverseEventsPanel",
+          icon = icon("shield-virus"),
+          AdverseEventsUI
+        ),
+        tabPanel(
+          "Model Settings",
+          value = "ModelSettingsPanel",
+          icon = icon("cubes"),
+          ModelsettingsUI
+        ),
+        tabPanel(
+          "Basecase Results",
+          value = "ResultsPanel",
+          icon = icon("square-poll-vertical"),
+          ResultsUI
+        ),
+        tabPanel(
+          "PSA results",
+          value = "PSAPanel",
+          icon = icon("layer-group"),
+          PSAUI
+        ),
+      )
+    )
+  ),
+  footer # Assuming this is sourced from your CSS.R file
+)
+
+##### Server #####
+server <- function(input, output, session) {
+  # Handlers and options -----
+  printLogJs <- function(x, ...) {
+    logjs(x)
+    TRUE
+  }
+  addHandler(printLogJs)
+  # NOTE: options(shiny.error = recover) has been intentionally removed.
+  # recover() is an interactive debugger - in a deployed/browser session
+  # there is no console to respond to, so any error anywhere in the app
+  # (survival fitting, occupancy build, Run Model, etc.) would freeze the
+  # entire session with the loading spinner stuck forever. Errors now
+  # surface as normal Shiny error messages instead.
+  options(shiny.sanitize.errors = FALSE, width = 160)
+  options(shiny.fullstacktrace = TRUE)
+  #options(shiny.error = browser)  # This will allow you to interactively debug when an error occurs
+  options(max.print = 10000)
+  # Reactive values definitions -----
+  values <- reactiveValues(
+    dataDefault = NULL,
+    dataLive = NULL
+  )
+  fileInUseData <- reactiveValues(
+    type = "default"
+  )
+  # Monitor user inactivity and handle timeout
+  observeEvent(input$timeout, {
+    showModal(modalDialog(
+      title = "Session Timeout",
+      "Your session has been inactive for 30 minutes and will now close.",
+      footer = modalButton("OK"),
+      easyClose = TRUE
+    ))
+    session$close()  # Close the session
+  })
+  
+  # Read in server functionalities -----
+  source("appFiles/WelcomeServer.R", local = TRUE)
+  source("appFiles/SurvivalComparatorServer.R", local = TRUE)
+  source("appFiles/SurvivalInterventionServer.R", local = TRUE)
+  source("appFiles/TreatmentCostsServer.R", local = TRUE)
+  source("appFiles/HealthstateUtilitiesServer.R", local = TRUE)
+  source("appFiles/AdverseEventsServer.R", local = TRUE)
+  source("appFiles/ModelSettingsServer.R", local = TRUE)
+  source("appFiles/ManualInputResetServer.R", local = TRUE)
+  source("appFiles/analysis_controller.R", local = TRUE)
+  source("appFiles/PSADistributions.R", local = TRUE)
+  source("appFiles/psa_summary_stats.R", local = TRUE)
+  source("appFiles/PSASummary.R", local = TRUE)
+  source("appFiles/sample_psa_parameters.R", local = TRUE)
+  source("appFiles/PSAEngine.R", local = TRUE)
+  source("appFiles/run_single_iteration.R", local = TRUE)
+  source("appFiles/calculate_ejp_table.R", local = TRUE)
+  source("appFiles/ResultsServer.R", local = TRUE)
+  source("appFiles/PSAServer.R", local = TRUE)
+  # # Session management
+  # session$onSessionEnded(function() {
+  #   stopApp()
+  # })
+  
+  # Debug server logic (Optional)
+  output$runRCodeOutput <- renderPrint({
+    req(rcode())
+    isolate({
+      eval(parse(text = rcode()$text))
+    })
+  })
+  rcode <- reactiveVal()
+  observeEvent(input$runRCodeButton, {
+    req(!Production);
+    rcode(list("text" = input$runRCode, "type" = "runRCode", "rand" = runif(1)))
+  }, ignoreNULL = TRUE, ignoreInit = TRUE)
+}
+
+# Run the application
+shinyApp(ui = ui, server = server)
+
+
+

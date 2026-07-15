@@ -1,0 +1,12 @@
+"Distribution","Parameter","Value"
+"Exponential","Log Rate",-3.86083337196958
+"Weibull","Log Shape",0.622456419070092
+"Weibull","Log Scale",3.73463335367792
+"Gompertz","Shape",0.0343156393479462
+"Gompertz","Rate",-4.64159352807306
+"Lognormal","Mu",3.47379630715716
+"Lognormal","Log Sigma",-0.329331598886024
+"Loglogistic","Log Shape",0.918775562499354
+"Loglogistic","Log Scale",3.47382682309638
+"Gamma","Log Shape",1.00999343231064
+"Gamma","Log Rate",-2.62194498084061

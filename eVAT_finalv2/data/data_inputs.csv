@@ -1,0 +1,53 @@
+Input,Estimate,Source
+Pluvicto 6-week cycle cost,"$29,320",Mehrens et al 2023 (4)
+Trillium 6-week cycle cost,"$33,333",IPR pricing assumptions 
+PFS cost (1st month following end of treatment),"$6,421",Mehrens et al 2023 (4)
+PFS cost (subsequent months),"$3,094",Mehrens et al 2023 (4)
+PPS cost (per month),"$5,732",Mehrens et al 2023 (4)
+PFS utility (annual),0.76,Bremner et al 2007 (5)
+PPS utility (annual),0.54,Sandblom et al 2004 (6)
+Adverse events probabilities,,
+Fatigue,0.0029,Sartor et al 2021 (1)
+Dry mouth,0,
+Nausea,0.0006,
+Anemia,0.0066,
+Back pain,0.0016,
+Arthralgia,0.0006,
+Decreased appetite,0.0009,
+Constipation,0.0006,
+Diarrhea,0.0004,
+Vomiting,0.0005,
+Thrombocytopenia,0.004,
+Lymphopenia,0.0039,
+Leukopenia,0.0012,
+Renal effects,0.004,
+Adverse events costs,,
+Fatigue,"$11,517",McGregor et al 2023 (7)
+Dry mouth,"$3,095",NHS reference cost converted to US dollars (8)
+Nausea,"$8,026",McGregor et al 2023 (7)
+Anemia,"$22,496",Bilir et al 2016 (9)
+Back pain,"$28,893",Wong et al 2018 (10)
+Arthralgia,"$6,927",McGregor et al 2023 (7)
+Decreased appetite,"$9,848",McGregor et al 2023 (7)
+Constipation,"$7,112",McGregor et al 2023 (7)
+Diarrhea,"$8,227",McGregor et al 2023 (7)
+Vomiting,"$8,552",McGregor et al 2023 (7)
+Thrombocytopenia,"$26,889",Bilir et al 2016 (9)
+Lymphopenia,"$4,590",NHS reference cost converted to US dollars (8)
+Leukopenia,"$19,999",Wong et al 2018 (10)
+Renal effects,"$2,513",NHS reference cost converted to US dollars (8)
+Adverse events disutilities,,
+Fatigue,-0.0004,NICE TA760 (11)
+Dry mouth,-0.005,"Sher et al, 2018 (12)"
+Nausea,-0.00029,NICE TA760 (11)
+Anemia,-0.00029,NICE TA712 (13)
+Back pain,-0.00017,NICE TA712 (13)
+Arthralgia,-0.00017,NICE TA712 (13)
+Decreased appetite,-0.00029,NICE TA760 (11)
+Constipation,0,Assumed
+Diarrhea,-0.00033,NICE TA712 (13)
+Vomiting,-0.00018,NICE TA712 (13)
+Thrombocytopenia,-0.00022,NICE TA712 (13)
+Lymphopenia,-0.00017,NICE TA760 (11)
+Leukopenia,-0.00188,NICE TA712 (13)
+Renal effects,-0.0008,NICE DG37 (14)
